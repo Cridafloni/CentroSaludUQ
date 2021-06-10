@@ -1,6 +1,8 @@
+from datetime import datetime
 from io import BytesIO
 
 import dateutil
+import time
 from dateutil.relativedelta import relativedelta
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
@@ -29,12 +31,13 @@ class LoteInline(admin.TabularInline):
 
 
 class ProductoAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
+    admin.site.disable_action('delete_selected')
     resource_class = ProductoResource
-    list_display = ('nombre', 'material',
+    list_display = ('eliminado','nombre', 'material',
                     'presentacion', 'proveedor', 'registro_invima',
                     'tipo', 'lotes_registrados',
                     'cantidad_unidades_disponibles',)
-    list_filter = ('tipo', ('fecha_registro', DateRangeFilter))
+    list_filter = ('tipo', ('fecha_registro', DateRangeFilter), 'eliminado')
     ordering = ('fecha_registro',)
     date_hierarchy = 'fecha_registro'
     search_fields = ('registro_invima', 'nombre',)
@@ -44,7 +47,8 @@ class ProductoAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
               'proveedor', 'descripcion')
     summernote_fields = ('descripcion',)
     inlines = (LoteInline,)
-    actions = ['descargar_base_producto', 'descargar_registros']
+    actions = ['descargar_base_producto', 'descargar_registros','eliminar_seleccionados', 'recuperar_seleccionados']
+    
 
     def descargar_base_producto(self, request, queryset):
         output = BytesIO()
@@ -88,6 +92,16 @@ class ProductoAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
         return pdfConfig(data, "Reporte artículos")
 
     descargar_registros.short_description = "Descargar registros en PDF"
+
+    def eliminar_seleccionados(self, request, queryset):
+        queryset.update(eliminado=False)
+        queryset.update(fecha_eliminacion= datetime.now())
+    eliminar_seleccionados.short_description= "Eliminar los seleccionados"
+
+    def recuperar_seleccionados(self, request, queryset):
+        queryset.update(eliminado=True)
+        queryset.update(fecha_eliminacion= None)
+    recuperar_seleccionados.short_description= "Recuperar los seleccionados"
 
 
 class ScrapeStatusFilter(SimpleListFilter):

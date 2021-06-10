@@ -13,6 +13,10 @@ class Producto(models.Model):
     descripcion = models.TextField(blank=True, null=True)
     material = models.CharField(max_length=30, blank=True, null=True)
     presentacion = models.CharField(max_length=30)
+
+    eliminado = models.BooleanField(default=True, verbose_name='En lista')
+    fecha_eliminacion =  models.DateField(null=True)
+
     MEDICAMENTO = 'MEDICAMENTO'
     ASEO = 'ASEO'
     INSUMO = 'INSUMO'
@@ -70,6 +74,9 @@ class Lote(models.Model):
     lote_del_producto = models.CharField(max_length=30)
     descripcion = models.TextField(blank=True, null=True)
     activo = models.BooleanField(default=True)
+
+    eliminado = models.BooleanField(default=False)
+    fecha_eliminacion =  models.DateField(null=True)
 
     def save(self, force_insert=False, force_update=False):
         self.lote_del_producto = self.lote_del_producto.upper()
@@ -153,6 +160,9 @@ class SalidaLote(models.Model):
     producto = models.ForeignKey(Lote, on_delete=models.CASCADE)
     descripcion = models.TextField(blank=True, null=True)
 
+    eliminado = models.BooleanField(default=False)
+    fecha_eliminacion =  models.DateField(null=True)
+
     class Meta:
         verbose_name_plural = "LOTE SALIDA"
         verbose_name = 'LOTES SALIDA'
@@ -173,6 +183,9 @@ class EntradaLote(models.Model):
     cantidad_entrante = models.PositiveIntegerField(default=0)
     producto = models.ForeignKey(Lote, on_delete=models.CASCADE)
     descripcion = models.TextField(blank=True, null=True)
+
+    eliminado = models.BooleanField(default=False)
+    fecha_eliminacion =  models.DateField(null=True)
 
     class Meta:
         verbose_name_plural = "LOTE ENTRADA"
