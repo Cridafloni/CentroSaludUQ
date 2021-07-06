@@ -140,13 +140,13 @@ class ScrapeStatusFilter(SimpleListFilter):
 
 class LoteAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
     resource_class = LoteResource
-    list_display = ('producto', 'semaforizacion', 'registro_invima', 'cantidad_entrada',
+    list_display = ('eliminado','producto', 'semaforizacion', 'registro_invima', 'cantidad_entrada',
                     'fecha_ingreso', 'fecha_vencimiento',
                     'lote_del_producto',
                     'unidades_restantes', 'total_entradas',
                     'total_salidas', '_meses_vencimiento', 'activo')
     raw_id_fields = ('producto',)
-    list_filter = ('producto__tipo', ScrapeStatusFilter, 'fecha_ingreso', 'fecha_vencimiento',)
+    list_filter = ('producto__tipo', ScrapeStatusFilter, 'fecha_ingreso', 'fecha_vencimiento','eliminado',)
     ordering = ('fecha_vencimiento',)
     date_hierarchy = 'fecha_ingreso'
     search_fields = ('lote_del_producto', 'producto__registro_invima')
@@ -155,7 +155,7 @@ class LoteAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
     fields = ('producto', 'cantidad_entrada',
               'fecha_ingreso', 'fecha_vencimiento',
               'lote_del_producto', 'descripcion')
-    actions = ['descargar_base_lote', 'descargar_registros', 'cambiar_estado']
+    actions = ['descargar_base_lote', 'descargar_registros', 'cambiar_estado','eliminar_seleccionados','recuperar_seleccionados']
 
     def descargar_base_lote(self, request, queryset):
         output = BytesIO()
@@ -202,6 +202,18 @@ class LoteAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
         quetyset.update(activo=False)
 
     cambiar_estado.short_description = "Desactivar lotes"
+    descargar_registros.short_description = "Descargar registros en pdf"
+
+    def eliminar_seleccionados(self, request, queryset):
+        queryset.update(eliminado=False)
+        queryset.update(fecha_eliminacion= datetime.now())
+    eliminar_seleccionados.short_description= "Eliminar los seleccionados"
+
+    def recuperar_seleccionados(self, request, queryset):
+        queryset.update(eliminado=True)
+        queryset.update(fecha_eliminacion= None)
+    recuperar_seleccionados.short_description= "Recuperar los seleccionados"
+
 
 
 class SalidaLoteAdmin(ImportExportModelAdmin):
@@ -231,7 +243,6 @@ class SalidaLoteAdmin(ImportExportModelAdmin):
         data = finalList
         return pdfConfig(data, "Reporte Salida de productos.")
 
-    descargar_registros.short_description = "Descargar registros en pdf"
 
 
 class EntradaLoteAdmin(ImportExportModelAdmin):

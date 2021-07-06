@@ -75,7 +75,7 @@ class Lote(models.Model):
     descripcion = models.TextField(blank=True, null=True)
     activo = models.BooleanField(default=True)
 
-    eliminado = models.BooleanField(default=False)
+    eliminado = models.BooleanField(default=True, verbose_name="En lista")
     fecha_eliminacion =  models.DateField(null=True)
 
     def save(self, force_insert=False, force_update=False):
