@@ -110,26 +110,46 @@ class Lote(models.Model):
         return self.meses_vencimiento
 
     @property
+    def dias_vencimiento(self):
+        end = self.fecha_vencimiento
+        if end is None:
+            return -1
+        start = timezone.now().date()
+        num_days = (end.year - start.year) * 365 + (end.month - start.month) * 30 + (end.day - start.day)
+        return num_days
+
+    @property
+    def _dias_vencimiento(self):
+        if self.dias_vencimiento == -1:
+            return "NO APLICA"
+        return self.dias_vencimiento
+
+    @property
     def semaforizacion(self):
         meses = self.meses_vencimiento
+        dias = self.dias_vencimiento
         if meses >= 11:
             return format_html("<div style='width: 100px; height:15px; background-color:#008f39'>")
         elif meses >= 5 and meses < 11:
             return format_html("<div style='width: 100px; height:15px; background-color:#FFFF00'>")
-        elif meses >= 0 < 5:
+        elif meses > 0 and meses < 5 or (meses == 0 and dias >= 0):
             return format_html("<div style='width: 100px; height:15px; background-color:#cb3234'>")
-        elif meses < 0:
-            return format_html("<div style='width: 100px; height:15px; background-color:#008f39'>")
+        elif meses < 0 or (meses == 0 and dias < 0):
+            return format_html("<div style='width: 100px; height:15px; background-color:#000000'>")
 
     @property
     def estado(self):
         meses = self.meses_vencimiento
+        dias = self.dias_vencimiento
         if meses >= 11:
             return "VERDE"
         elif meses >= 5 < 11:
             return "AMARILLO"
-        elif meses < 5:
+        elif meses > 0 and meses < 5 or (meses == 0 and dias >= 0):
             return "ROJO"
+        elif meses < 0 or (meses == 0 and dias < 0):
+            return "NEGRO" 
+        
 
     @property
     def total_salidas(self):

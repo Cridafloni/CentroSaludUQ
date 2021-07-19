@@ -114,6 +114,7 @@ class ScrapeStatusFilter(SimpleListFilter):
             ('verde', 'Verde: Más de 11 meses'),
             ('amarillo', 'Amarillo: Entre 5 y 11 meses'),
             ('rojo', 'Rojo: Menos de 5 meses'),
+            ('negro', 'Negro: Productos caducados'),
             ('sin caducar', 'No caduca.'),
         ]
 
@@ -121,15 +122,21 @@ class ScrapeStatusFilter(SimpleListFilter):
         color = self.value()
         if color == 'verde':
             fechafinal = timezone.now().date() + dateutil.relativedelta.relativedelta(months=11)
-            lotes = Lote.objects.filter(fecha_vencimiento__gt=fechafinal)
+            lotes = Lote.objects.filter(fecha_vencimiento__gte=fechafinal)
             return lotes
         elif color == 'amarillo':
             fechafinal = timezone.now().date() + dateutil.relativedelta.relativedelta(months=5)
             fechaInicial = timezone.now().date() + dateutil.relativedelta.relativedelta(months=11)
-            lotes = Lote.objects.filter(fecha_ingreso__lt=fechaInicial, fecha_vencimiento__gt=fechafinal)
+            lotes = Lote.objects.filter(fecha_vencimiento__lt=fechaInicial, fecha_vencimiento__gte=fechafinal)
             return lotes
         elif color == 'rojo':
-            fechafinal = timezone.now().date() + dateutil.relativedelta.relativedelta(months=5)
+            fechaInicial = timezone.now().date() + dateutil.relativedelta.relativedelta(months=5)
+            fechafinal = timezone.now().date()
+            lotes = Lote.objects.filter(fecha_vencimiento__lt=fechaInicial, fecha_vencimiento__gte=fechafinal)
+            return lotes
+
+        elif color == 'negro':
+            fechafinal = timezone.now().date()
             lotes = Lote.objects.filter(fecha_vencimiento__lt=fechafinal)
             return lotes
 
