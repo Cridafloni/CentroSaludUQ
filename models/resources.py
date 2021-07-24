@@ -9,7 +9,7 @@ class ProductoResource(resources.ModelResource):
         fields = ('nombre', 'material',
                   'presentacion', 'proveedor',
                   'registro_invima', 'tipo')
-        import_id_fields = ('registro_invima',)
+        import_id_fields = ('producto_id',)
         exclude = ('descripcion',)
 
 

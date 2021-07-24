@@ -8,7 +8,8 @@ from django.utils.html import format_html
 class Producto(models.Model):
     nombre = models.CharField(max_length=30)
     proveedor = models.CharField(max_length=30)
-    registro_invima = models.CharField(max_length=30, unique=True, primary_key=True)
+    registro_invima = models.CharField(max_length=30)
+    producto_id = models.AutoField(primary_key=True)
     fecha_registro = models.DateField(auto_now_add=True)
     descripcion = models.TextField(blank=True, null=True)
     material = models.CharField(max_length=30, blank=True, null=True)
