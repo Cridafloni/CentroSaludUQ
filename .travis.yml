@@ -13,9 +13,13 @@ install:
   - pip install make
   #- pip install -q Django==3.0.6
 
+
+
 env:
   - DJANGO_VERSION=3.0.6
 
+before_script:
+  - createdb --encoding=UTF-8 {{ project_name }} --username=postgres --owner=`whoami`
 
 # command to run tests
 script:
