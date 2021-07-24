@@ -1,0 +1,27 @@
+language: python
+python: 
+  - "3.9"
+
+# Match postgresql version to that in conf/pillar/project.sl
+services:
+  - postgresql
+  # command to install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install coverage
+  - pip install flake8
+  - pip install make
+  #- pip install -q Django==3.0.6
+
+env:
+  - DJANGO_VERSION=3.0.6
+
+
+# command to run tests
+script:
+  - python manage.py makemigrations --dry-run | grep 'No changes detected' || (echo 'There are changes which require migrations.' && exit 1)
+  - coverage run manage.py test
+  - coverage report -m --fail-under 80
+  - flake8 .
+  #- make docs
+  #- npm test
