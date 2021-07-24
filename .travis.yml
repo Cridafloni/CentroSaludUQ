@@ -19,7 +19,7 @@ env:
   - DJANGO_VERSION=3.0.6
 
 before_script:
-  - createdb --encoding=UTF-8 {{ project_name }} --username=postgres --owner=`whoami`
+  - createdb --encoding=UTF-8 csudb -U postgres
 
 # command to run tests
 script:
