@@ -1,6 +1,6 @@
 from django.contrib.admin import ListFilter
 from django.core.exceptions import ImproperlyConfigured
-from django.shortcuts import render, redirect
+##from django.shortcuts import render, redirect
 
 class SingleTextInputFilter(ListFilter):
     """

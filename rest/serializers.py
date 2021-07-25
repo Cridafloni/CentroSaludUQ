@@ -25,5 +25,3 @@ class EntradaLoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntradaLote
         fields = '__all__'
-
-

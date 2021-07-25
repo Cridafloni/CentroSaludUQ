@@ -15,26 +15,24 @@ class Producto(models.Model):
     material = models.CharField(max_length=30, blank=True, null=True)
     presentacion = models.CharField(max_length=30)
 
-    eliminado = models.BooleanField(default=True, verbose_name='En lista')
-    fecha_eliminacion =  models.DateField(null=True)
+    eliminado = models.BooleanField(default=True, verbose_name="En lista")
+    fecha_eliminacion = models.DateField(null=True)
 
-    MEDICAMENTO = 'MEDICAMENTO'
-    ASEO = 'ASEO'
-    INSUMO = 'INSUMO'
-    EQUIPO = 'EQUIPO'
-    SEGURIDAD_EN_EL_TRABAJO = 'SEGURIDAD Y SALUD EN EL TRABAJO'
+    MEDICAMENTO = "MEDICAMENTO"
+    ASEO = "ASEO"
+    INSUMO = "INSUMO"
+    EQUIPO = "EQUIPO"
+    SEGURIDAD_EN_EL_TRABAJO = "SEGURIDAD Y SALUD EN EL TRABAJO"
     OPTION_CHOICES = [
-        (MEDICAMENTO, 'MEDICAMENTO'),
-        (ASEO, 'ELEMENTO DE ASEO'),
-        (INSUMO, 'PRODUCTO E INSUMO'),
-        (EQUIPO, 'EQUIPO'),
-        (SEGURIDAD_EN_EL_TRABAJO, 'SEGURIDAD Y SALUD EN EL TRABAJO'),
+        (MEDICAMENTO, "MEDICAMENTO"),
+        (ASEO, "ELEMENTO DE ASEO"),
+        (INSUMO, "PRODUCTO E INSUMO"),
+        (EQUIPO, "EQUIPO"),
+        (SEGURIDAD_EN_EL_TRABAJO, "SEGURIDAD Y SALUD EN EL TRABAJO"),
     ]
 
     tipo = models.CharField(
-        choices=OPTION_CHOICES,
-        default=MEDICAMENTO,
-        max_length=100
+        choices=OPTION_CHOICES, default=MEDICAMENTO, max_length=100
     )
 
     def save(self, force_insert=False, force_update=False):
@@ -64,7 +62,7 @@ class Producto(models.Model):
 
     class Meta:
         verbose_name_plural = "ARTÍCULO"
-        verbose_name = 'ARTÍCULOS'
+        verbose_name = "ARTÍCULOS"
 
 
 class Lote(models.Model):
@@ -77,7 +75,7 @@ class Lote(models.Model):
     activo = models.BooleanField(default=True)
 
     eliminado = models.BooleanField(default=True, verbose_name="En lista")
-    fecha_eliminacion =  models.DateField(null=True)
+    fecha_eliminacion = models.DateField(null=True)
 
     def save(self, force_insert=False, force_update=False):
         self.lote_del_producto = self.lote_del_producto.upper()
@@ -88,7 +86,7 @@ class Lote(models.Model):
 
     class Meta:
         verbose_name_plural = "LOTE"
-        verbose_name = 'LOTES'
+        verbose_name = "LOTES"
 
     @property
     def registro_invima(self):
@@ -116,7 +114,11 @@ class Lote(models.Model):
         if end is None:
             return -1
         start = timezone.now().date()
-        num_days = (end.year - start.year) * 365 + (end.month - start.month) * 30 + (end.day - start.day)
+        num_days = (
+            (end.year - start.year) * 365
+            + (end.month - start.month) * 30
+            + (end.day - start.day)
+        )
         return num_days
 
     @property
@@ -130,13 +132,21 @@ class Lote(models.Model):
         meses = self.meses_vencimiento
         dias = self.dias_vencimiento
         if meses >= 11:
-            return format_html("<div style='width: 100px; height:15px; background-color:#008f39'>")
+            return format_html(
+                "<div style='width: 100px; height:15px; background-color:#008f39'>"
+            )
         elif meses >= 5 and meses < 11:
-            return format_html("<div style='width: 100px; height:15px; background-color:#FFFF00'>")
+            return format_html(
+                "<div style='width: 100px; height:15px; background-color:#FFFF00'>"
+            )
         elif meses > 0 and meses < 5 or (meses == 0 and dias >= 0):
-            return format_html("<div style='width: 100px; height:15px; background-color:#cb3234'>")
+            return format_html(
+                "<div style='width: 100px; height:15px; background-color:#cb3234'>"
+            )
         elif meses < 0 or (meses == 0 and dias < 0):
-            return format_html("<div style='width: 100px; height:15px; background-color:#000000'>")
+            return format_html(
+                "<div style='width: 100px; height:15px; background-color:#000000'>"
+            )
 
     @property
     def estado(self):
@@ -149,8 +159,7 @@ class Lote(models.Model):
         elif meses > 0 and meses < 5 or (meses == 0 and dias >= 0):
             return "ROJO"
         elif meses < 0 or (meses == 0 and dias < 0):
-            return "NEGRO" 
-        
+            return "NEGRO"
 
     @property
     def total_salidas(self):
@@ -182,19 +191,26 @@ class SalidaLote(models.Model):
     descripcion = models.TextField(blank=True, null=True)
 
     eliminado = models.BooleanField(default=False)
-    fecha_eliminacion =  models.DateField(null=True)
+    fecha_eliminacion = models.DateField(null=True)
 
     class Meta:
         verbose_name_plural = "LOTE SALIDA"
-        verbose_name = 'LOTES SALIDA'
+        verbose_name = "LOTES SALIDA"
 
     def __str__(self):
-        return "{} - {} - {}".format(self.producto.producto.tipo, self.producto.producto.nombre,
-                                     self.producto.producto.presentacion)
+        return "{} - {} - {}".format(
+            self.producto.producto.tipo,
+            self.producto.producto.nombre,
+            self.producto.producto.presentacion,
+        )
 
     @classmethod
     def create(cls, cantidad_salida, producto, descripcion):
-        entrada = cls(cantidad_salida=cantidad_salida, producto=producto, descripcion=descripcion)
+        entrada = cls(
+            cantidad_salida=cantidad_salida,
+            producto=producto,
+            descripcion=descripcion,
+        )
         entrada.save()
         return entrada
 
@@ -206,18 +222,25 @@ class EntradaLote(models.Model):
     descripcion = models.TextField(blank=True, null=True)
 
     eliminado = models.BooleanField(default=False)
-    fecha_eliminacion =  models.DateField(null=True)
+    fecha_eliminacion = models.DateField(null=True)
 
     class Meta:
         verbose_name_plural = "LOTE ENTRADA"
-        verbose_name = 'LOTES ENTRADA'
+        verbose_name = "LOTES ENTRADA"
 
     @classmethod
     def create(cls, cantidad_entrante, producto, descripcion):
-        entrada = cls(cantidad_entrante=cantidad_entrante, producto=producto, descripcion=descripcion)
+        entrada = cls(
+            cantidad_entrante=cantidad_entrante,
+            producto=producto,
+            descripcion=descripcion,
+        )
         entrada.save()
         return entrada
 
     def __str__(self):
-        return "{} - {} - {}".format(self.producto.producto.tipo, self.producto.producto.nombre,
-                                     self.producto.producto.presentacion)
+        return "{} - {} - {}".format(
+            self.producto.producto.tipo,
+            self.producto.producto.nombre,
+            self.producto.producto.presentacion,
+        )
