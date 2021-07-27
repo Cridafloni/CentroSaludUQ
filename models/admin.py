@@ -18,7 +18,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Table, TableStyle, Paragraph
 from xlsxwriter.workbook import Workbook
 
-from models.models import *
+from models.models import Lote, timezone, Producto, SalidaLote, EntradaLote
 from models.resources import ProductoResource, LoteResource, LoteSalidaResource
 
 
@@ -275,7 +275,8 @@ class LoteAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
         output.seek(0)
         response = HttpResponse(
             output.read(),
-            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            content_type="application/vnd.openxmlformats-officedocument.\
+                spreadsheetml.sheet",
         )
         response["Content-Disposition"] = "attachment; filename=BaseLote.xlsx"
         return response

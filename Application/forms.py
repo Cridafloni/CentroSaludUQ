@@ -1,5 +1,5 @@
 from django import forms
-from models.models import *
+from models.models import SalidaLote
 
 
 class SalidaLoteForm(forms.ModelForm):

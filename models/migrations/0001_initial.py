@@ -8,83 +8,149 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Lote',
+            name="Lote",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cantidad_entrada', models.PositiveIntegerField(default=0)),
-                ('fecha_ingreso', models.DateField()),
-                ('fecha_vencimiento', models.DateField(blank=True, null=True)),
-                ('lote_del_producto', models.CharField(max_length=30)),
-                ('descripcion', models.TextField(blank=True, null=True)),
-                ('activo', models.BooleanField(default=True)),
-                ('eliminado', models.BooleanField(default=True, verbose_name='En lista')),
-                ('fecha_eliminacion', models.DateField(null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("cantidad_entrada", models.PositiveIntegerField(default=0)),
+                ("fecha_ingreso", models.DateField()),
+                ("fecha_vencimiento", models.DateField(blank=True, null=True)),
+                ("lote_del_producto", models.CharField(max_length=30)),
+                ("descripcion", models.TextField(blank=True, null=True)),
+                ("activo", models.BooleanField(default=True)),
+                (
+                    "eliminado",
+                    models.BooleanField(default=True, verbose_name="En lista"),
+                ),
+                ("fecha_eliminacion", models.DateField(null=True)),
             ],
             options={
-                'verbose_name': 'LOTES',
-                'verbose_name_plural': 'LOTE',
+                "verbose_name": "LOTES",
+                "verbose_name_plural": "LOTE",
             },
         ),
         migrations.CreateModel(
-            name='Producto',
+            name="Producto",
             fields=[
-                ('nombre', models.CharField(max_length=30)),
-                ('proveedor', models.CharField(max_length=30)),
-                ('registro_invima', models.CharField(max_length=30)),
-                ('producto_id', models.AutoField(primary_key=True, serialize=False)),
-                ('fecha_registro', models.DateField(auto_now_add=True)),
-                ('descripcion', models.TextField(blank=True, null=True)),
-                ('material', models.CharField(blank=True, max_length=30, null=True)),
-                ('presentacion', models.CharField(max_length=30)),
-                ('eliminado', models.BooleanField(default=True, verbose_name='En lista')),
-                ('fecha_eliminacion', models.DateField(null=True)),
-                ('tipo', models.CharField(choices=[('MEDICAMENTO', 'MEDICAMENTO'), ('ASEO', 'ELEMENTO DE ASEO'), ('INSUMO', 'PRODUCTO E INSUMO'), ('EQUIPO', 'EQUIPO'), ('SEGURIDAD Y SALUD EN EL TRABAJO', 'SEGURIDAD Y SALUD EN EL TRABAJO')], default='MEDICAMENTO', max_length=100)),
+                ("nombre", models.CharField(max_length=30)),
+                ("proveedor", models.CharField(max_length=30)),
+                ("registro_invima", models.CharField(max_length=30)),
+                (
+                    "producto_id",
+                    models.AutoField(primary_key=True, serialize=False),
+                ),
+                ("fecha_registro", models.DateField(auto_now_add=True)),
+                ("descripcion", models.TextField(blank=True, null=True)),
+                (
+                    "material",
+                    models.CharField(blank=True, max_length=30, null=True),
+                ),
+                ("presentacion", models.CharField(max_length=30)),
+                (
+                    "eliminado",
+                    models.BooleanField(default=True, verbose_name="En lista"),
+                ),
+                ("fecha_eliminacion", models.DateField(null=True)),
+                (
+                    "tipo",
+                    models.CharField(
+                        choices=[
+                            ("MEDICAMENTO", "MEDICAMENTO"),
+                            ("ASEO", "ELEMENTO DE ASEO"),
+                            ("INSUMO", "PRODUCTO E INSUMO"),
+                            ("EQUIPO", "EQUIPO"),
+                            (
+                                "SEGURIDAD Y SALUD EN EL TRABAJO",
+                                "SEGURIDAD Y SALUD EN EL TRABAJO",
+                            ),
+                        ],
+                        default="MEDICAMENTO",
+                        max_length=100,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'ARTÍCULOS',
-                'verbose_name_plural': 'ARTÍCULO',
+                "verbose_name": "ARTÍCULOS",
+                "verbose_name_plural": "ARTÍCULO",
             },
         ),
         migrations.CreateModel(
-            name='SalidaLote',
+            name="SalidaLote",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fecha_salida', models.DateField(auto_now_add=True)),
-                ('cantidad_salida', models.PositiveIntegerField(default=0)),
-                ('descripcion', models.TextField(blank=True, null=True)),
-                ('eliminado', models.BooleanField(default=False)),
-                ('fecha_eliminacion', models.DateField(null=True)),
-                ('producto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Lote')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("fecha_salida", models.DateField(auto_now_add=True)),
+                ("cantidad_salida", models.PositiveIntegerField(default=0)),
+                ("descripcion", models.TextField(blank=True, null=True)),
+                ("eliminado", models.BooleanField(default=False)),
+                ("fecha_eliminacion", models.DateField(null=True)),
+                (
+                    "producto",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="models.Lote",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'LOTES SALIDA',
-                'verbose_name_plural': 'LOTE SALIDA',
+                "verbose_name": "LOTES SALIDA",
+                "verbose_name_plural": "LOTE SALIDA",
             },
         ),
         migrations.AddField(
-            model_name='lote',
-            name='producto',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Producto'),
+            model_name="lote",
+            name="producto",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="models.Producto",
+            ),
         ),
         migrations.CreateModel(
-            name='EntradaLote',
+            name="EntradaLote",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fecha_entrada', models.DateField(auto_now_add=True)),
-                ('cantidad_entrante', models.PositiveIntegerField(default=0)),
-                ('descripcion', models.TextField(blank=True, null=True)),
-                ('eliminado', models.BooleanField(default=False)),
-                ('fecha_eliminacion', models.DateField(null=True)),
-                ('producto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Lote')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("fecha_entrada", models.DateField(auto_now_add=True)),
+                ("cantidad_entrante", models.PositiveIntegerField(default=0)),
+                ("descripcion", models.TextField(blank=True, null=True)),
+                ("eliminado", models.BooleanField(default=False)),
+                ("fecha_eliminacion", models.DateField(null=True)),
+                (
+                    "producto",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="models.Lote",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'LOTES ENTRADA',
-                'verbose_name_plural': 'LOTE ENTRADA',
+                "verbose_name": "LOTES ENTRADA",
+                "verbose_name_plural": "LOTE ENTRADA",
             },
         ),
     ]

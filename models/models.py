@@ -133,19 +133,23 @@ class Lote(models.Model):
         dias = self.dias_vencimiento
         if meses >= 11:
             return format_html(
-                "<div style='width: 100px; height:15px; background-color:#008f39'>"
+                "<div style='width: 100px; \
+                    height:15px; background-color:#008f39'>"
             )
         elif meses >= 5 and meses < 11:
             return format_html(
-                "<div style='width: 100px; height:15px; background-color:#FFFF00'>"
+                "<div style='width: 100px; \
+                    height:15px; background-color:#FFFF00'>"
             )
         elif meses > 0 and meses < 5 or (meses == 0 and dias >= 0):
             return format_html(
-                "<div style='width: 100px; height:15px; background-color:#cb3234'>"
+                "<div style='width: 100px; \
+                    height:15px; background-color:#cb3234'>"
             )
         elif meses < 0 or (meses == 0 and dias < 0):
             return format_html(
-                "<div style='width: 100px; height:15px; background-color:#000000'>"
+                "<div style='width: 100px; \
+                    height:15px; background-color:#000000'>"
             )
 
     @property
