@@ -97,7 +97,8 @@ class ProductoAdmin(ImportExportModelAdmin, SummernoteModelAdmin):
         output.seek(0)
         response = HttpResponse(
             output.read(),
-            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            content_type="application/vnd.openxmlformats-\
+                officedocument.spreadsheetml.sheet",
         )
         response[
             "Content-Disposition"
