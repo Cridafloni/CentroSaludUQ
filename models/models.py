@@ -35,7 +35,9 @@ class Producto(models.Model):
         choices=OPTION_CHOICES, default=MEDICAMENTO, max_length=100
     )
 
-    def save(self, force_insert=False, force_update=False):
+    def save(self, *args, **kwargs):
+        force_insert=False
+        force_update=False
         self.nombre = self.nombre.upper()
         self.proveedor = self.proveedor.upper()
         self.registro_invima = self.registro_invima.upper()
